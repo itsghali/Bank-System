@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bank</title>
+    <style>
+    /* General Body Styling */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    main {
+        flex: 1;
+    }
+
+    /* Header Styling */
+    header {
+        background-color: #007bff;
+        color: white;
+        padding: 8px 0;
+        text-align: center;
+    }
+
+    header h1 {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    /* Navigation Bar Styling */
+    nav {
+        background-color: #333;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+    }
+
+    nav a {
+        color: white;
+        padding: 8px 12px;
+        text-decoration: none;
+        font-size: 15px;
+    }
+
+    nav a:hover {
+        background-color: #575757;
+    }
+
+    /* Main Container Styling */
+    .container {
+        width: 90%;
+        margin: 15px auto;
+        flex: 1;
+    }
+
+    /* Cards Section for Client Dashboard */
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 250px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #007bff;
+    }
+
+    .card p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    .card button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .card button:hover {
+        background-color: #007bff;
+    }
+
+    .list-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* Footer Styling */
+    footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            margin-top: auto;
+        }
+
+        footer .footer-info {
+            font-size: 9px;
+            color: #ddd;
+        }
+    
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+        h2 {
+            font-size: 16px;
+        }
+    
+        p {
+            font-size: 11px;
+        }
+    
+        ul li {
+            font-size: 11px;
+        }
+    
+        .service-card {
+            width: 100%;
+        }
+    
+        .footer-links {
+            flex-direction: column;
+        }
+    }
+    h2 {
+        text-align: center;
+    }
+
+    table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .back-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .back-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+    <head>
+    <!-- Font Awesome CDN link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head> 
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1RevoluBank</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="client.html">Home</a>
+        <a href="debitAccount.html">Debit account</a>
+        <a href="creditAccount.html">Credit account</a>
+        <a href="userDashboard.html">Dashboard</a>
+        <a href="#" id="logoutBtn" onclick="logout()"><i class="fas fa-power-off"></i></a>
+    </nav>
+
+    <div class="container">
+      <button class="back-btn" onclick="window.location.href='userDashboard.html'">Back to Dashboard</button>
+      <h2>Transaction History</h2>
+      <!-- Filter dropdowns -->
+<div>
+    <label for="actionFilter">Filter by Action Type:</label>
+    <select id="actionFilter">
+        <option value="">All Actions</option>
+        <option value="Add Funds">Add Funds</option>
+        <option value="Pay Off">Pay Off</option>
+        <option value="Withdraw Funds">Withdraw</option> <!-- Added Withdraw option -->
+    </select>
+
+    <label for="accountFilter">Filter by Account Type:</label>
+    <select id="accountFilter">
+        <option value="">All Accounts</option>
+        <option value="credit">Credit</option>
+        <option value="debit">Debit</option>
+    </select>
+
+    <label for="searchBar">Search:</label>
+    <input type="text" id="searchBar" placeholder="Search transactions...">
+</div>
+
+<!-- Sorting options -->
+<div>
+    <label for="sortBy">Sort by:</label>
+    <select id="sortBy">
+        <option value="timestamp">Date</option>
+        <option value="actionType">Action Type</option>
+        <option value="amount">Amount</option>
+    </select>
+    <label for="sortOrder">Order:</label>
+    <select id="sortOrder">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+</div>
+
+      <table>
+          <thead>
+              <tr>
+                  <th>Date</th>
+                  <th>Account Name</th>
+                  <th>Action Type</th>
+                  <th>Amount</th>
+              </tr>
+          </thead>
+          <tbody id="transactionTableBody">
+              <!-- Transactions will be inserted here -->
+          </tbody>
+      </table>
+  </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2025 Your Bank. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="data.js"></script>
+<script>
+    // Wait for the database to be ready before performing any operations
+    dbReady.then((db) => {
+        console.log("Database is ready in userTransactionHistory.js");
+
+        // Load transactions when the page is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCreditTransactions(db); // Pass the db object to the function
+        });
+
+        // Event listeners for filters, sorting, and search
+        document.getElementById("actionFilter").addEventListener("change", () => loadCreditTransactions(db));
+        document.getElementById("accountFilter").addEventListener("change", () => loadCreditTransactions(db));
+        document.getElementById("searchBar").addEventListener("input", () => loadCreditTransactions(db));
+        document.getElementById("sortBy").addEventListener("change", () => loadCreditTransactions(db));
+        document.getElementById("sortOrder").addEventListener("change", () => loadCreditTransactions(db));
+
+            // Handle logout with the new icon-based button
+    document.getElementById('logoutBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        logout();
+    });
+
+    function logout() {
+        const transaction = db.transaction([storeName], "readwrite");
+        const store = transaction.objectStore(storeName);
+        store.delete("username"); // Remove the user from IndexedDB
+
+        transaction.oncomplete = function() {
+            alert("Logged out.");
+            window.location.href = "revolutBank.html"; // Redirect to login page
+        };
+
+        transaction.onerror = function(event) {
+            console.error("Error logging out:", event.target.error);
+        };
+    }
+})
+
+    function loadCreditTransactions(db) {
+    const username = localStorage.getItem("currentUser");
+    if (!username) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    console.log("Loading transactions for user:", username); // Debug log
+
+    const transaction = db.transaction([actionsStoreName], "readonly");
+    const store = transaction.objectStore(actionsStoreName);
+
+    const request = store.getAll(); // Get all records from the object store
+
+    request.onsuccess = function(event) {
+        const allTransactions = event.target.result;
+        console.log("All transactions in the store:", allTransactions); // Debug log
+
+        // Filter based on action type, account type, and search query
+        const actionFilter = document.getElementById("actionFilter").value;
+        const accountFilter = document.getElementById("accountFilter").value.toLowerCase();
+        const searchQuery = document.getElementById("searchBar").value.toLowerCase();
+
+        // Filter transactions
+        let filteredTransactions = allTransactions.filter(trans => {
+            // Ensure the transaction belongs to the current user
+            if (trans.username !== username) return false;
+
+            // Filter by action type (e.g., "pay off")
+            if (actionFilter !== "" && trans.actionType !== actionFilter) return false;
+
+            // Filter by account type (e.g., "debit" or "credit")
+            if (accountFilter !== "") {
+                if (accountFilter === "debit" && trans.accountType !== "debit") return false;
+                if (accountFilter === "credit" && trans.accountType !== "credit") return false;
+            }
+
+            // Filter by search query (account name or action type)
+            const accountNameMatch = trans.accountname?.toLowerCase().includes(searchQuery) || false;
+            const actionTypeMatch = trans.actionType?.toLowerCase().includes(searchQuery) || false;
+
+            if (searchQuery && !accountNameMatch && !actionTypeMatch) return false;
+
+            return true; // Include the transaction if all filters pass
+        });
+
+        console.log("Filtered transactions:", filteredTransactions); // Debug log
+
+        // Sort transactions based on selected criteria
+        const sortBy = document.getElementById("sortBy").value;
+        const sortOrder = document.getElementById("sortOrder").value;
+
+        filteredTransactions.sort((a, b) => {
+            let comparison = 0;
+
+            if (sortBy === "timestamp") {
+                comparison = new Date(a.timestamp) - new Date(b.timestamp);
+            } else if (sortBy === "actionType") {
+                comparison = a.actionType.localeCompare(b.actionType);
+            } else if (sortBy === "amount") {
+                comparison = a.amount - b.amount;
+            }
+
+            return sortOrder === "asc" ? comparison : -comparison;
+        });
+
+        console.log("Filtered and sorted transactions:", filteredTransactions); // Debug log
+
+        // Display the filtered and sorted transactions
+        displayActions(filteredTransactions);
+    };
+
+    request.onerror = function(event) {
+        console.error("Error loading transactions:", event.target.error);
+    };
+}
+
+function displayActions(actions) {
+    const tableBody = document.getElementById("transactionTableBody");
+    if (!tableBody) {
+        console.error("Transaction table body not found!");
+        return;
+    }
+
+    // Clear the table body
+    tableBody.innerHTML = "";
+
+    if (actions.length === 0) {
+        const row = document.createElement("tr");
+        row.innerHTML = '<td colspan="4" style="text-align: center;">No transactions found</td>';
+        tableBody.appendChild(row);
+        return;
+    }
+
+    // Loop through each action and add it to the table
+    actions.forEach(action => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${new Date(action.timestamp).toLocaleString()}</td>
+            <td>${action.accountname || 'N/A'}</td>
+            <td>${action.actionType || 'N/A'}</td>
+            <td>$${!isNaN(parseFloat(action.amount)) ? parseFloat(action.amount).toFixed(2) : '0.00'}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+</script>
+</body>
+</html>

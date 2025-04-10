@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        /* Page Title */
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+
+        /* Form Styles */
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* Label Styles */
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Input Styles */
+        input[type="text"],
+        input[type="password"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* Select Dropdown */
+        select {
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        /* Button Styles */
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Centering the form */
+        form {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <form id="registerForm">
+        <h1>Register</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+        <br>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+        <br>
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" required>
+        <br>
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+        </select>
+        <br>
+        <button type="submit">Register</button>
+    </form>
+
+    <script src="data.js"></script>
+<script>
+// Wait for the database to be ready
+dbReady.then((db) => {
+    // Handle form submission
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        if (!db) {
+            alert("Database is not ready yet. Please try again later.");
+            return;
+        }
+        // Get form data
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const phoneNumber = document.getElementById("phoneNumber").value.trim();
+        const role = document.getElementById("role").value;
+        // Create user object with consistent format
+        const user = {
+            username: username.toLowerCase(), // Ensure consistent username format
+            password: password,
+            firstName: firstName.toLowerCase(),
+            lastName: lastName.toLowerCase(),
+            phoneNumber: phoneNumber,
+            role: role.toLowerCase()
+        };
+        // Check if the username already exists
+        const transaction = db.transaction([storeName], "readonly");
+        const store = transaction.objectStore(storeName);
+        const getRequest = store.get(username.toLowerCase()); // Use lowercase for consistency
+        getRequest.onsuccess = function() {
+            if (getRequest.result) {
+                alert("Username already exists!");
+            } else {
+                // Add user to IndexedDB
+                const addTransaction = db.transaction([storeName], "readwrite");
+                const addStore = addTransaction.objectStore(storeName);
+                const addRequest = addStore.add(user);
+                addRequest.onsuccess = function() {
+                    console.log("User registered successfully");
+                    alert("Registration successful!");
+                    document.getElementById("registerForm").reset();
+                    window.location.href = "login.html";
+                };
+                addRequest.onerror = function(event) {
+                    console.error("Error registering user:", event.target.error);
+                };
+            }
+        };
+        getRequest.onerror = function(event) {
+            console.error("Error checking username:", event.target.error);
+        };
+    });
+}).catch((error) => {
+    console.error("Failed to initialize database:", error);
+});
+</script>
+</body>
+</html>

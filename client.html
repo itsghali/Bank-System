@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bank</title>
+    <style>
+    /* General Body Styling */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    
+    main {
+      flex: 1;
+    }
+
+    /* Header Styling */
+    header {
+        background-color: #007bff;
+        color: white;
+        padding: 8px 0;
+        text-align: center;
+    }
+    
+    header h1 {
+        font-size: 18px;
+        margin: 0;
+    }
+    
+    /* Navigation Bar Styling */
+    nav {
+        background-color: #333;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+    }
+    
+    nav a {
+        color: white;
+        padding: 8px 12px;
+        text-decoration: none;
+        font-size: 15px;
+    }
+    
+    nav a:hover {
+        background-color: #575757;
+    }
+    
+    /* Main Container Styling */
+    .container {
+        width: 90%;
+        margin: 15px auto;
+        flex: 1;
+    }
+    
+    /* Services Section Styling */
+    .services {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 20px;
+        padding-bottom: 2px;
+    }
+    
+    .service-card {
+        background-color: white;
+        padding: 8px;
+        border-radius: 6px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        width: 30%;
+        text-align: center;
+    }
+    
+    .service-card h3 {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    
+    .service-card p {
+        font-size: 11px;
+        color: #555;
+    }
+    
+    /* Cards Section for Client Dashboard */
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 250px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #007bff;
+    }
+    
+    .card p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 15px;
+    }
+    
+    .card button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    
+    .card button:hover {
+        background-color: #007bff;
+    }
+    
+    /* Section Styling */
+    .section {
+        margin-bottom: 15px;
+    }
+    
+    .section h2 {
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 8px;
+    }
+    
+    .section p {
+        font-size: 12px;
+        color: #555;
+    }
+    
+    /* About Us and Why Us Sections */
+    #about-us, #why-us {
+        margin-top: 20px;
+    }
+    
+    h2 {
+        font-size: 20px;
+        color: #007bff;
+        font-weight: 600;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        text-align: center;
+    }
+    
+    p {
+        font-size: 12px;
+        color: #555;
+        line-height: 1.4;
+        margin-bottom: 12px;
+        text-align: center;
+        max-width: 650px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+        max-width: 650px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    ul li {
+        font-size: 12px;
+        color: #555;
+        margin-bottom: 6px;
+        line-height: 1.4;
+    }
+    
+    ul li strong {
+        color: black;
+        font-weight: 600;
+    }
+    
+    #why-us {
+        padding: 2px;
+        border-radius: 6px;
+        margin-top: 0px;
+        margin-bottom: 10px;
+    }
+    
+    /* Footer Styling */
+    footer {
+        background-color: black;
+        color: white;
+        text-align: center;
+        padding: 8px 0;
+        margin-top: auto;
+    }
+    
+    footer .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 8px;
+    }
+    
+    footer .footer-links a {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 11px;
+    }
+    
+    footer .footer-info {
+        font-size: 9px;
+        color: #ddd;
+    }
+    
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+        h2 {
+            font-size: 16px;
+        }
+    
+        p {
+            font-size: 11px;
+        }
+    
+        ul li {
+            font-size: 11px;
+        }
+    
+        .service-card {
+            width: 100%;
+        }
+    
+        .footer-links {
+            flex-direction: column;
+        }
+    }
+</style>    
+    <head>
+        <!-- Font Awesome CDN link -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>RevoluBank</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="client.html">Home</a>
+        <a href="debitAccount.html">Debit account</a>
+        <a href="creditAccount.html">Credit account</a>
+        <a href="userDashboard.html">Dashboard</a>
+        <a href="#" id="logoutBtn" onclick="logout()"><i class="fas fa-power-off"></i></a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+      <h2>Welcome to Your Client Dashboard</h2>
+      <div class="cards">
+          <!-- Debit Account Card -->
+          <div class="card">
+              <h3>Debit Account</h3>
+              <p>View and manage your debit account details.</p>
+              <button onclick="window.location.href='debitAccount.html'">View Details</button>
+          </div>
+
+          <!-- Credit Account Card -->
+          <div class="card">
+              <h3>Credit Account</h3>
+              <p>Check your credit account information.</p>
+              <button onclick="window.location.href='creditAccount.html'">View Details</button>
+          </div>
+
+          <!-- Dashboard Card -->
+          <div class="card">
+              <h3>Dashboard</h3>
+              <p>Access your financial dashboard and charts.</p>
+              <button onclick="window.location.href='userDashboard.html'">View Dashboard</button>
+          </div>
+      </div>
+  </main>
+    <!-- Footer -->
+    <footer>
+        <div id="contact-us">
+            <p>Email: <a href="mailto:example@example.com">monemail@example.com</a></p>
+            <p>Phone number: <a href="tel:+1234567890">+1234567890</a></p>
+            <p>Location: <a href="https://www.google.com/maps/search/123+Main+St,+City,+Country" target="_blank">123 Main St, City, Country</a></p>
+        </div>
+        <div class="footer-info">
+            <p>&copy; 2025 Your Bank. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="data.js"></script>
+    <script>
+    // Wait for the database to be ready before performing any operations
+    dbReady.then((db) => {
+        console.log("Database is ready in client.js");
+    
+        // Retrieve the username from localStorage
+        const username = localStorage.getItem("currentUser");
+        if (!username) {
+            console.error("No user logged in");
+            return;
+        }
+    
+        // Perform database operations
+        const transaction = db.transaction([storeName], "readonly");
+        const store = transaction.objectStore(storeName);
+        const request = store.get(username);
+    
+        request.onsuccess = function(event) {
+            const user = event.target.result;
+            if (user) {
+                console.log("User retrieved:", user);
+            } else {
+                console.log("No user found with username:", username);
+            }
+        };
+    
+        request.onerror = function(event) {
+            console.error("Error retrieving user from IndexedDB:", event.target.error);
+        };
+    }).catch((error) => {
+        console.error("Error initializing database:", error);
+        alert("Database error. Please try again later.");
+    });
+    
+        // Handle logout with the new icon-based button
+        document.getElementById('logoutBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        logout();
+    });
+
+    function logout() {
+        const transaction = db.transaction([storeName], "readwrite");
+        const store = transaction.objectStore(storeName);
+        store.delete("username"); // Remove the user from IndexedDB
+
+        transaction.oncomplete = function() {
+            alert("Logged out.");
+            window.location.href = "revolutBank.html"; // Redirect to login page
+        };
+
+        transaction.onerror = function(event) {
+            console.error("Error logging out:", event.target.error);
+        };
+    }
+    </script>   
+</body>
+</html>

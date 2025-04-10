@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        /* Page Title */
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Form Styles */
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* Label Styles */
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Input Styles */
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* Button Styles */
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Centering the form */
+        form {
+            text-align: left;
+        }
+
+        /* Link Styles */
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #007bff;
+        }
+
+        .register-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <form id="loginForm">
+        <h1>Login</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="submit">Login</button>
+        <div class="register-link">
+            Don't have an account? <a href="register.html">Create one</a>
+        </div>
+    </form>
+    <script src="data.js"></script>
+    <script>
+    // Handle form submission
+    document.getElementById("loginForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+    
+        try {
+            // Wait for the database to be ready
+            const db = await dbReady;
+    
+            const username = document.getElementById("username").value.trim().toLowerCase();
+            const password = document.getElementById("password").value;
+    
+            const transaction = db.transaction([storeName], "readonly");
+            const store = transaction.objectStore(storeName);
+            const getRequest = store.get(username);
+    
+            getRequest.onsuccess = function() {
+                const user = getRequest.result;
+                if (user && user.password === password) {
+                    // Store current user in localStorage
+                    localStorage.setItem("currentUser", username);
+    
+                    // Redirect based on the user's role
+                    if (user.role === "admin") {
+                        window.location.href = "admin.html";
+                    } else {
+                        window.location.href = "client.html";
+                    }
+                } else {
+                    alert("Invalid username or password.");
+                }
+            };
+    
+            getRequest.onerror = function() {
+                alert("Error checking user credentials.");
+            };
+        } catch (error) {
+            console.error("Error accessing database:", error);
+            alert("Database error. Please try again later.");
+        }
+    });
+    </script>  
+</body>
+</html>

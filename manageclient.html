@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Clients</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        /* Navigation Bar Styling */
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav a {
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            background-color: #575757;
+        }
+
+        /* Client form styling */
+        #client-form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #client-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        #client-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        #client-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #client-form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Client table styling */
+        #client-table {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #client-table thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #client-table th,
+        #client-table td {
+            padding: 12px;
+            text-align: left;
+            font-size: 16px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #client-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #client-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        #client-table td:last-child {
+            text-align: center;
+        }
+
+        #client-table button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        #client-table button.edit {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        #client-table button.edit:hover {
+            background-color: #e0a800;
+        }
+
+        #client-table button.delete {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        #client-table button.delete:hover {
+            background-color: #c82333;
+        }
+
+            /* Footer Styling */
+    footer {
+        background-color: black;
+        color: white;
+        text-align: center;
+        padding: 8px 0;
+        margin-top: auto;
+    }
+    
+    footer .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 8px;
+    }
+    
+    footer .footer-links a {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 11px;
+    }
+    
+    footer .footer-info {
+        font-size: 9px;
+        color: #ddd;
+    }
+    
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+        h2 {
+            font-size: 16px;
+        }
+    
+        p {
+            font-size: 11px;
+        }
+    
+        ul li {
+            font-size: 11px;
+        }
+    
+        .service-card {
+            width: 100%;
+        }
+    
+        .footer-links {
+            flex-direction: column;
+        }
+    }
+    </style>
+    <!-- Font Awesome CDN link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>RevoluBank</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+      <a href="admin.html">Home</a>
+      <a href="manageemployee.html">Manage employee</a>
+      <a href="manageclient.html">Manage client</a>
+      <a href="manageressources.html">Manage ressources</a>
+      <a href="adminDashboard.html">Dashboard</a>
+      <a href="#" id="logoutBtn" onclick="logout()"><i class="fas fa-power-off"></i></a>
+  </nav>
+
+    <main>
+        <!-- Form for adding/updating clients -->
+        <div id="client-form">
+            <h2>Add/Update Client</h2>
+            <input type="text" id="client-username" placeholder="Username">
+            <input type="text" id="client-name" placeholder="Full Name">
+            <input type="email" id="client-email" placeholder="Client Email">
+            <input type="number" id="client-phone" placeholder="Phone Number">
+            <button id="save-client">Save Client</button>
+        </div>
+
+        <!-- Table to display clients -->
+        <table id="client-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Full name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be added dynamically here -->
+            </tbody>
+        </table>
+    </main>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2025 Your Bank. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="data.js"></script>
+<script>
+
+
+    // Open or create the database
+    const request = indexedDB.open('UserDB', 32);
+
+    request.onupgradeneeded = (event) => {
+        db = event.target.result;
+        if (!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName, { keyPath: "username" });
+            console.log("Object store created:", storeName);
+        }
+    };
+
+    request.onsuccess = (event) => {
+        db = event.target.result;
+        console.log("Database is ready");
+        fetchAndDisplayClients(); // Fetch and display clients when the database is ready
+    };
+
+    request.onerror = (event) => {
+        console.error("Failed to initialize database:", event.target.error);
+    };
+
+    // Function to fetch data from IndexedDB
+    function fetchDataFromIndexedDB() {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([storeName], "readonly");
+            const store = transaction.objectStore(storeName);
+            const request = store.getAll();
+
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = (err) => reject(err);
+        });
+    }
+
+    // Function to fetch and display clients
+    async function fetchAndDisplayClients() {
+        try {
+            const clients = await fetchDataFromIndexedDB();
+            const tableBody = document.getElementById("client-table").getElementsByTagName("tbody")[0];
+            tableBody.innerHTML = "";
+
+            if (clients.length === 0) {
+                tableBody.innerHTML = "<tr><td colspan='4'>No clients found.</td></tr>";
+                return;
+            }
+
+            clients.forEach((client) => {
+                const newRow = document.createElement("tr");
+
+                const usernameCell = document.createElement("td");
+                usernameCell.textContent = client.username;
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = client.name;
+
+                const emailCell = document.createElement("td");
+                emailCell.textContent = client.email;
+
+                const phoneCell = document.createElement("td");
+                phoneCell.textContent = client.phone;
+
+                const actionsCell = document.createElement("td");
+
+                const editButton = document.createElement("button");
+                editButton.textContent = "Edit";
+                editButton.classList.add("edit");
+                editButton.addEventListener("click", () => editClient(client));
+
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.classList.add("delete");
+                deleteButton.addEventListener("click", () => deleteClient(client.username));
+
+                actionsCell.appendChild(editButton);
+                actionsCell.appendChild(deleteButton);
+
+                newRow.appendChild(usernameCell);
+                newRow.appendChild(nameCell);
+                newRow.appendChild(emailCell);
+                newRow.appendChild(phoneCell);
+                newRow.appendChild(actionsCell);
+
+                tableBody.appendChild(newRow);
+            });
+        } catch (error) {
+            console.error("Error fetching clients:", error);
+            const tableBody = document.getElementById("client-table").getElementsByTagName("tbody")[0];
+            tableBody.innerHTML = "<tr><td colspan='4'>Error loading clients. Please try again later.</td></tr>";
+        }
+    }
+
+    // Function to save or update a client
+    async function saveClient() {
+        const username = document.getElementById("client-username").value.trim();
+        const name = document.getElementById("client-name").value.trim();
+        const email = document.getElementById("client-email").value.trim();
+        const phone = document.getElementById("client-phone").value.trim();
+
+        if (!username || !name || !email || !phone) {
+            alert("Please fill in all fields correctly.");
+            return;
+        }
+
+        const client = { username, name, email, phone };
+
+        try {
+            const transaction = db.transaction([storeName], "readwrite");
+            const store = transaction.objectStore(storeName);
+            const request = store.put(client);
+
+            request.onsuccess = () => {
+                console.log("Client saved successfully:", client);
+                fetchAndDisplayClients(); // Refresh the client list
+                clearForm(); // Clear the form
+                currentClientUsername = null; // Reset the currentClientUsername after saving
+            };
+
+            request.onerror = (event) => {
+                console.error("Error saving client:", event.target.error);
+            };
+        } catch (error) {
+            console.error("Error saving client:", error);
+        }
+    }
+
+    // Function to edit a client
+    function editClient(client) {
+        document.getElementById("client-username").value = client.username;
+        document.getElementById("client-name").value = client.name;
+        document.getElementById("client-email").value = client.email;
+        document.getElementById("client-phone").value = client.phone;
+        currentClientUsername = client.username;
+        console.log("Editing client with username:", currentClientUsername);
+    }
+
+    // Function to delete a client
+    async function deleteClient(username) {
+        if (!username) {
+            console.error("Invalid username provided for deletion.");
+            return;
+        }
+
+        if (confirm("Are you sure you want to delete this client?")) {
+            try {
+                const transaction = db.transaction([storeName], "readwrite");
+                const store = transaction.objectStore(storeName);
+                const request = store.delete(username);
+
+                request.onsuccess = () => {
+                    console.log("Client deleted successfully:", username);
+                    fetchAndDisplayClients(); // Refresh the client list
+                };
+
+                request.onerror = (event) => {
+                    console.error("Error deleting client:", event.target.error);
+                };
+            } catch (error) {
+                console.error("Error deleting client:", error);
+            }
+        }
+    }
+
+    // Function to clear the form
+    function clearForm() {
+        document.getElementById("client-username").value = "";
+        document.getElementById("client-name").value = "";
+        document.getElementById("client-email").value = "";
+        document.getElementById("client-phone").value = "";
+        currentClientUsername = null;
+    }
+
+    // Event listener for the Save Client button
+    document.getElementById('save-client').addEventListener('click', function (event) {
+        event.preventDefault();
+        saveClient();
+    });
+
+        // Handle logout with the new icon-based button
+        document.getElementById('logoutBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        logout();
+    });
+
+    function logout() {
+        const transaction = db.transaction([storeName], "readwrite");
+        const store = transaction.objectStore(storeName);
+        store.delete("username"); // Remove the user from IndexedDB
+
+        transaction.oncomplete = function() {
+            alert("Logged out.");
+            window.location.href = "revolutBank.html"; // Redirect to login page
+        };
+
+        transaction.onerror = function(event) {
+            console.error("Error logging out:", event.target.error);
+        };
+    }
+</script>
+</body>
+</html>

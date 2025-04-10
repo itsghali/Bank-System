@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bank</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav a {
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            background-color: #575757;
+        }
+
+        .container {
+            width: 90%;
+            margin: 15px auto;
+            flex: 1;
+        }
+
+        .services {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding-bottom: 2px;
+        }
+
+        .service-card {
+            background-color: white;
+            padding: 8px;
+            border-radius: 6px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            text-align: center;
+        }
+
+        .service-card h3 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .service-card p {
+            font-size: 11px;
+            color: #555;
+        }
+
+        .section {
+            margin-bottom: 15px;
+        }
+
+        .section h2 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .section p {
+            font-size: 12px;
+            color: #555;
+        }
+
+        #about-us, #why-us {
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #007bff;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        p {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            text-align: center;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        ul li {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        ul li strong {
+            color: black;
+            font-weight: 600;
+        }
+
+        #why-us {
+            padding: 2px;
+            border-radius: 6px;
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 8px;
+        }
+
+        footer .footer-links a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 11px;
+        }
+
+        footer .footer-info {
+            font-size: 9px;
+            color: #ddd;
+        }
+
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 16px;
+            }
+
+            p {
+                font-size: 11px;
+            }
+
+            ul li {
+                font-size: 11px;
+            }
+
+            .service-card {
+                width: 30%;
+            }
+
+            .footer-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <head>
+        <!-- Font Awesome CDN link -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>RevoluBank</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="#">Home</a>
+        <a href="#services">Services</a>
+        <a href="#about-us">About Us</a>
+        <a href="#contact-us">Contact Us</a>
+        <a href="login.html">Login</a>
+        <a href="#" id="logoutBtn"><i class="fas fa-power-off"></i></a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Services Section -->
+        <section id="services" class="services">
+            <div class="service-card">
+                <h3>Personal Banking</h3>
+                <p>Manage your personal finances with ease.</p>
+            </div>
+            <div class="service-card">
+                <h3>Business Banking</h3>
+                <p>Solutions for your business needs.</p>
+            </div>
+            <div class="service-card">
+                <h3>Online Banking</h3>
+                <p>Access your account securely anytime.</p>
+            </div>
+        </section>
+
+        <!-- Bottom Text Section -->
+        <div class="bottom-text">
+            <div id="about-us">
+                <h2>About Us</h2>
+                <p>We are dedicated to providing exceptional financial services tailored to the unique needs of our clients. Our mission is to empower individuals and businesses with the tools, knowledge, and resources necessary to achieve financial success. By offering personalized solutions and expert guidance, we help you navigate the complexities of finance and make informed decisions.</p>
+            </div>
+            <div id="why-us">
+                <h2>Why Us</h2>
+                <p>Choosing the right bank is essential to your financial well-being, and here's why [Bank Name] is the right choice for you:</p>
+                <ul>
+                    <li><strong>Expertise:</strong> Decades of experience offering personalized financial solutions.</li>
+                    <li><strong>Security:</strong> Cutting-edge encryption to protect your financial information.</li>
+                    <li><strong>Convenience:</strong> Easy-to-use mobile and online banking, available anytime, anywhere.</li>
+                    <li><strong>Personalized Service:</strong> We understand your financial goals and provide tailored solutions.</li>
+                    <li><strong>Competitive Rates:</strong> Low-interest loans, high-yield savings, and flexible credit cards.</li>
+                    <li><strong>Innovation:</strong> Embracing the latest financial technologies for your benefit.</li>
+                    <li><strong>Community Commitment:</strong> Supporting local initiatives and financial literacy programs.</li>
+                </ul>
+                <p>Experience the difference with [Bank Name]—where your financial success is our priority.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div id="contact-us">
+            <p>Email: <a href="mailto:contact@revoluBank.com">contact@revoluBank.com</a></p>
+            <p>Phone number: <a href="tel:+212522742596">+212 522742596</a></p>
+            <p>Location: <a href="https://www.google.fr/maps/place/Bd+Abdelmoumen,+Casablanca+20250/@33.5734208,-7.6283019,17z/data=!3m1!4b1!4m6!3m5!1s0xda7d2ba7b2fa1bd:0xcad77e9ba2db49c6!8m2!3d33.5734164!4d-7.625727!16s%2Fg%2F1xb2fygc?entry=ttu&g_ep=EgoyMDI1MDEwNi4xIKXMDSoASAFQAw%3D%3D" target="_blank">Boulevard Abdelmoumen, Casablanca, Maroc</a></p>
+        </div>
+        <div class="footer-info">
+            <p>&copy; 2025 Your Bank. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="data.js"></script>
+<script>
+// Wait for the database to be ready
+dbReady.then((db) => {
+    console.log("Database is ready");
+
+    // Function to log actions (e.g., add funds, withdraw funds) to the actions store
+    function logAction(username, accountname, actionType, amount, accountType) {
+    const transaction = db.transaction([actionsStoreName], "readwrite");
+    const actionsStore = transaction.objectStore(actionsStoreName);
+
+    // Ensure amount is a valid number
+    const parsedAmount = parseFloat(amount);
+    const validAmount = !isNaN(parsedAmount) ? parsedAmount : 0;
+
+    const action = {
+        username: username,
+        accountname: accountname || 'N/A', // Default to 'N/A' if accountname is missing
+        actionType: actionType || 'N/A',   // Default to 'N/A' if actionType is missing
+        amount: validAmount,               // Use the valid amount
+        timestamp: new Date().toISOString(), // Timestamp
+        accountType: accountType || 'N/A'  // Default to 'N/A' if accountType is missing
+    };
+
+    const request = actionsStore.add(action);
+
+    request.onsuccess = function() {
+        console.log("Action logged successfully:", action);
+    };
+
+    request.onerror = function(event) {
+        console.error("Error logging action:", event.target.error);
+    };
+}
+
+    // Function to retrieve user from IndexedDB
+    function getUserFromDB(username, callback) {
+        const transaction = db.transaction([storeName], "readonly");
+        const store = transaction.objectStore(storeName);
+        const request = store.get(username); // Use the provided username
+        request.onsuccess = function(event) {
+            const user = event.target.result;
+            if (user) {
+                const firstName = user.firstName || user.FirstName; // Handle casing inconsistency
+                callback({ ...user, firstName }); // Return consistent user object
+            } else {
+                console.log(`No user found with username: ${username}`);
+                callback(null);
+            }
+        };
+        request.onerror = function(event) {
+            console.error("Error retrieving user from IndexedDB:", event.target.error);
+            callback(null);
+        };
+    }
+
+    // Handle logout with the new icon-based button
+    document.getElementById('logoutBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        logout();
+    });
+
+    function logout() {
+        const transaction = db.transaction([storeName], "readwrite");
+        const store = transaction.objectStore(storeName);
+        store.delete("username"); // Remove the user from IndexedDB
+
+        transaction.oncomplete = function() {
+            alert("Logged out.");
+            window.location.href = "revolutBank.html"; // Redirect to login page
+        };
+
+        transaction.onerror = function(event) {
+            console.error("Error logging out:", event.target.error);
+        };
+    }
+
+});
+</script>       
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bank</title>
+    <style>
+/* General Body Styling */
+body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    main {
+        flex: 1;
+    }
+
+    /* Header Styling */
+    header {
+        background-color: #007bff;
+        color: white;
+        padding: 8px 0;
+        text-align: center;
+    }
+
+    header h1 {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    /* Navigation Bar Styling */
+    nav {
+        background-color: #333;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+    }
+
+    nav a {
+        color: white;
+        padding: 8px 12px;
+        text-decoration: none;
+        font-size: 15px;
+    }
+
+    nav a:hover {
+        background-color: #575757;
+    }
+
+    /* Main Container Styling */
+    .container {
+        width: 90%;
+        margin: 15px auto;
+        flex: 1;
+    }
+
+    /* Cards Section for Client Dashboard */
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 250px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #007bff;
+    }
+
+    .card p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    .card button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .card button:hover {
+        background-color: #007bff;
+    }
+
+    .list-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    /* Footer Styling */
+    footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            margin-top: auto;
+        }
+
+        footer .footer-info {
+            font-size: 9px;
+            color: #ddd;
+        }
+    
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+        h2 {
+            font-size: 16px;
+        }
+    
+        p {
+            font-size: 11px;
+        }
+    
+        ul li {
+            font-size: 11px;
+        }
+    
+        .service-card {
+            width: 100%;
+        }
+    
+        .footer-links {
+            flex-direction: column;
+        }
+    }
+    h2 {
+        text-align: center;
+    }
+    </style>
+    <head>
+    <!-- Font Awesome CDN link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head> 
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>RevoluBank</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="clien.html">Home</a>
+        <a href="debitAccount.html">Debit account</a>
+        <a href="creditAccount.html">Credit account</a>
+        <a href="userDashboard.html">Dashboard</a>
+        <a href="#" id="logoutBtn" onclick="logout()"><i class="fas fa-power-off"></i></a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <h2>Welcome to Your Client Dashboard</h2>
+        <div class="cards">
+            <!-- Total Debit Account Card -->
+            <div class="card">
+                <div id="debitaccount">
+                    <h3>Total Debit Account</h3>
+                    <p id="totalDebitBalance">Total Debit Balance</p>
+                </div>
+            </div>
+
+            <!-- Total Credit Account Card -->
+            <div class="card">
+                <div id="creditaccount">
+                    <h3>Total Credit Account</h3>
+                    <p id="totalCreditBalance">Total Credit Balance</p>
+                    
+                </div>
+            </div>
+
+            <!-- Transaction History Card -->
+            <div class="card">
+                <div id="transactionsHistory">
+                    <h3>Transactions History</h3>
+                    <p id="totaltransactionhistory">See all your transactions</p>
+                    <button id="viewDetailsBtn" onclick="window.location.href='userTransactionHistory.html'">View Details</button>
+                </div>
+        </div>
+        
+        <!-- Charts Card -->
+        <div class="card">
+            <div id="userCharts">
+                <h3>Charts</h3>
+                <p id="userCharts">See all your financial charts</p>
+                <button id="userChartsBtn" onclick="window.location.href='userCharts.html'">View Details</button>
+            </div>
+    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2025 Your Bank. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+<script>
+// Wait for the database to be ready before performing any operations
+dbReady.then((db) => {
+    console.log("Database is ready in userDashboard.js");
+    displayTotalAmounts(); // Display total amounts when DB is ready
+}).catch((error) => {
+    console.error("Error initializing database:", error);
+    alert("Database error. Please try again later.");
+});
+
+// Calculate total amount for a specific store (credit or debit)
+function calculateTotalAmount(storeName, callback) {
+    const username = localStorage.getItem("currentUser");
+    if (!username) {
+        console.error("No user logged in");
+        return;
+    }
+
+    const transaction = db.transaction([storeName], "readonly");
+    const store = transaction.objectStore(storeName);
+    const request = store.getAll();
+
+    request.onsuccess = function(event) {
+        const accounts = event.target.result.filter(account => account.username === username); // Filter by username
+        console.log("Accounts found for", storeName, ":", accounts);
+        
+        const total = accounts.reduce((sum, account) => {
+            const balance = storeName === creditAccountStoreName ? 
+                (account.creditBalance || 0) : 
+                (account.debitBalance || 0);
+            return sum + balance;
+        }, 0);
+        
+        console.log("Total for ", storeName, ":", total);
+        callback(total);
+    };
+
+    request.onerror = function(event) {
+        console.error("Error fetching accounts from", storeName, ":", event.target.error);
+    };
+}
+
+// Display total amounts in the UI
+function displayTotalAmounts() {
+    // Update credit balance
+    calculateTotalAmount(creditAccountStoreName, (totalCredit) => {
+        const creditElement = document.getElementById("totalCreditBalance");
+        if (creditElement) {
+            creditElement.textContent = `$${totalCredit.toFixed(2)}`;
+        } else {
+            console.error("totalCreditBalance element not found");
+        }
+    });
+
+    // Update debit balance
+    calculateTotalAmount(debitAccountStoreName, (totalDebit) => {
+        const debitElement = document.getElementById("totalDebitBalance");
+        if (debitElement) {
+            debitElement.textContent = `$${totalDebit.toFixed(2)}`;
+        } else {
+            console.error("totalDebitBalance element not found");
+        }
+    });
+}
+
+// Log user actions
+function logAction(username, accountname, actionType, amount, accountType) {
+    const transaction = db.transaction([actionsStoreName], "readwrite");
+    const actionsStore = transaction.objectStore(actionsStoreName);
+
+    // Ensure amount is a valid number
+    const parsedAmount = parseFloat(amount);
+    const validAmount = !isNaN(parsedAmount) ? parsedAmount : 0;
+
+    const action = {
+        username: username,
+        accountname: accountname || 'N/A', // Default to 'N/A' if accountname is missing
+        actionType: actionType || 'N/A',   // Default to 'N/A' if actionType is missing
+        amount: validAmount,               // Use the valid amount
+        timestamp: new Date().toISOString(), // Timestamp
+        accountType: accountType || 'N/A'  // Default to 'N/A' if accountType is missing
+    };
+
+    const request = actionsStore.add(action);
+
+    request.onsuccess = function() {
+        console.log("Action logged successfully:", action);
+    };
+
+    request.onerror = function(event) {
+        console.error("Error logging action:", event.target.error);
+    };
+}
+
+    // Handle logout with the new icon-based button
+    document.getElementById('logoutBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        logout();
+    });
+
+    function logout() {
+        const transaction = db.transaction([storeName], "readwrite");
+        const store = transaction.objectStore(storeName);
+        store.delete("username"); // Remove the user from IndexedDB
+
+        transaction.oncomplete = function() {
+            alert("Logged out.");
+            window.location.href = "revolutBank.html"; // Redirect to login page
+        };
+
+        transaction.onerror = function(event) {
+            console.error("Error logging out:", event.target.error);
+        };
+    }
+
+// Check for logged in user when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) {
+        window.location.href = "revolutBank.html";
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bank</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        main {
+            flex: 1;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 0;
+            text-align: center;
+        }
+        
+        h2 {
+          text-align: center;
+        }
+
+        header h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        /* Navigation Bar Styling */
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+        
+        nav a {
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        
+        nav a:hover {
+            background-color: #575757;
+        }
+
+        /* Main Container Styling */
+        .container {
+            width: 90%;
+            margin: 15px auto;
+            flex: 1;
+        }
+
+        /* Cards Section for Client Dashboard */
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .card button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .card button:hover {
+            background-color: #007bff;
+        }
+
+        /* Account Creation Form */
+        .account-form {
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .account-form input {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .account-form button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .account-form button:hover {
+            background-color: #007bff;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            margin-top: auto;
+        }
+
+        footer .footer-info {
+            font-size: 9px;
+            color: #ddd;
+        }
+
+        /* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .card {
+        width: calc(50% - 20px); /* 2 cards per row on medium screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 100%; /* 1 card per row on small screens */
+    }
+}
+    </style>
+    <head>
+      <!-- Font Awesome CDN link -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  </head>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>RevoluBank</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="client.html">Home</a>
+        <a href="debitAccount.html">Debit account</a>
+        <a href="creditAccount.html">Credit account</a>
+        <a href="userDashboard.html">Dashboard</a>
+        <a href="#" id="logoutBtn" onclick="logout()"><i class="fas fa-power-off"></i></a>
+    </nav>
+
+    <h2>Welcome to Your Debit Accounts</h2>
+
+    <!-- Account Creation Form -->
+    <div class="account-form">
+        <h2>Create a Debit Account</h2>
+        <input type="text" id="accountname" placeholder="Account name" required>
+        <input type="number" id="newBalance" placeholder="Initial Balance" required>
+        <button id="createAccount" onclick="createAccount()">Create Account</button>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        
+        <div class="cards" id="debitaccount">
+            <!-- Debit Account Cards will be injected here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2025 Your Bank. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+<script>
+// Wait for the database to be ready before performing any operations
+dbReady.then((db) => {
+    console.log("Database is ready in debitAccount.js");
+    displayDebitAccount(); // Display accounts when DB is ready
+}).catch((error) => {
+    console.error("Error initializing database:", error);
+    alert("Database error. Please try again later.");
+});
+
+// Function to display debit accounts
+function displayDebitAccount() {
+    const username = localStorage.getItem("currentUser");
+    if (!username) {
+        console.error("No user logged in");
+        return;
+    }
+
+    const transaction = db.transaction([debitAccountStoreName], "readonly");
+    const store = transaction.objectStore(debitAccountStoreName);
+    
+    // Get all records from the store
+    const request = store.getAll();
+
+    request.onsuccess = function(event) {
+        const allAccounts = event.target.result;
+        // Filter accounts for the current user
+        const userAccounts = allAccounts.filter(account => account.username === username);
+        
+        const debitAccountsContainer = document.getElementById("debitaccount");
+
+        if (!debitAccountsContainer) {
+            console.error("Container for debit accounts not found.");
+            return;
+        }
+
+        debitAccountsContainer.innerHTML = "";
+
+        if (userAccounts && userAccounts.length > 0) {
+            userAccounts.forEach((account) => {
+                const accountCard = document.createElement("div");
+                accountCard.className = "card";
+                accountCard.innerHTML = `
+                    <h3>${account.accountname || "Unnamed Account"}</h3>
+                    <p>Balance: $${account.debitBalance ? account.debitBalance.toFixed(2) : "0.00"}</p>
+                    <button onclick="addFunds('${account.accountname}')">Add Funds</button>
+                    <button onclick="withdrawFunds('${account.accountname}')">Withdraw Funds</button>
+                    <button onclick="deleteAccount('${account.accountname}')">Delete</button>
+                `;
+                debitAccountsContainer.appendChild(accountCard);
+            });
+        } else {
+            debitAccountsContainer.innerHTML = "<p>No accounts found for this user.</p>";
+        }
+    };
+
+    request.onerror = function(event) {
+        console.error("Error fetching accounts:", event.target.error);
+    };
+}
+
+// Function to create a new account
+function createAccount() {
+    const username = localStorage.getItem("currentUser");
+    const accountname = document.getElementById("accountname").value;
+    const balanceStr = document.getElementById("newBalance").value;
+    const debitBalance = parseFloat(balanceStr);
+
+    if (!username) {
+        alert("Please log in first");
+        return;
+    }
+
+    if (!accountname || isNaN(debitBalance)) {
+        alert("Please fill in all fields correctly");
+        return;
+    }
+
+    const transaction = db.transaction([debitAccountStoreName], "readwrite");
+    const store = transaction.objectStore(debitAccountStoreName);
+
+    const account = {
+        username: username,
+        accountname: accountname,
+        debitBalance: debitBalance
+    };
+
+    const request = store.add(account);
+
+    request.onsuccess = function() {
+        logAction(username, accountname, "Create Account", debitBalance, "debit");
+        alert("Account created successfully!");
+        displayDebitAccount();
+        document.getElementById("accountname").value = "";
+        document.getElementById("newBalance").value = "";
+    };
+
+    request.onerror = function(event) {
+        console.error("Error creating account:", event.target.error);
+        alert("Error creating account. The account name might already exist.");
+    };
+}
+
+// Function to add funds
+function addFunds(accountname) {
+    const amount = prompt("Enter the amount to add:");
+    const parsedAmount = parseFloat(amount);
+
+    if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) {
+        alert("Please enter a valid positive amount");
+        return;
+    }
+
+    const transaction = db.transaction([debitAccountStoreName], "readwrite");
+    const store = transaction.objectStore(debitAccountStoreName);
+    const request = store.get(accountname);
+
+    request.onsuccess = function(event) {
+        const account = event.target.result;
+        if (account) {
+            account.debitBalance += parsedAmount;
+            const updateRequest = store.put(account);
+            
+            updateRequest.onsuccess = function() {
+                logAction(account.username, accountname, "Add Funds", parsedAmount, "debit");
+                alert("Funds added successfully!");
+                displayDebitAccount();
+            };
+        } else {
+            alert("Account not found!");
+        }
+    };
+
+    request.onerror = function(event) {
+        console.error("Error updating account:", event.target.error);
+        alert("Error updating account");
+    };
+}
+
+// Function to withdraw funds
+function withdrawFunds(accountname) {
+    const amount = prompt("Enter the amount to withdraw:");
+    const parsedAmount = parseFloat(amount);
+
+    if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) {
+        alert("Please enter a valid positive amount");
+        return;
+    }
+
+    const transaction = db.transaction([debitAccountStoreName], "readwrite");
+    const store = transaction.objectStore(debitAccountStoreName);
+    const request = store.get(accountname);
+
+    request.onsuccess = function(event) {
+        const account = event.target.result;
+        if (account) {
+            if (account.debitBalance >= parsedAmount) {
+                account.debitBalance -= parsedAmount;
+                const updateRequest = store.put(account);
+                
+                updateRequest.onsuccess = function() {
+                    logAction(account.username, accountname, "Withdraw Funds", parsedAmount, "debit");
+                    alert("Withdrawal successful!");
+                    displayDebitAccount();
+                };
+            } else {
+                alert("Insufficient funds!");
+            }
+        } else {
+            alert("Account not found!");
+        }
+    };
+
+    request.onerror = function(event) {
+        console.error("Error updating account:", event.target.error);
+        alert("Error updating account");
+    };
+}
+
+// Function to delete an account
+function deleteAccount(accountname) {
+    const transaction = db.transaction([debitAccountStoreName], "readonly");
+    const store = transaction.objectStore(debitAccountStoreName);
+    const request = store.get(accountname);
+
+    request.onsuccess = function(event) {
+        const account = event.target.result;
+
+        if (account) {
+            console.log("Account found:", account); // Debugging line to check account details
+
+            // Check if the debitBalance is zero
+            if (Number(account.debitBalance) === 0) {
+                if (confirm("Are you sure you want to delete this account?")) {
+                    const deleteTransaction = db.transaction([debitAccountStoreName], "readwrite");
+                    const deleteStore = deleteTransaction.objectStore(debitAccountStoreName);
+                    const deleteRequest = deleteStore.delete(accountname);
+
+                    deleteRequest.onsuccess = function() {
+                        alert("Account deleted successfully!");
+                        displayDebitAccount(); // Refresh the displayed accounts
+                    };
+
+                    deleteRequest.onerror = function(event) {
+                        console.error("Error deleting account:", event.target.error);
+                        alert("Error deleting account");
+                    };
+                }
+            } else {
+                alert("Cannot delete account with a positive balance. Please withdraw funds first.");
+            }
+        } else {
+            alert("Account not found.");
+        }
+    };
+
+    request.onerror = function(event) {
+        console.error("Error retrieving account:", event.target.error);
+        alert("Error retrieving account");
+    };
+}
+
+function logAction(username, accountname, actionType, amount, accountType) {
+    const transaction = db.transaction([actionsStoreName], "readwrite");
+    const actionsStore = transaction.objectStore(actionsStoreName);
+
+    // Ensure amount is a valid number
+    const parsedAmount = parseFloat(amount);
+    const validAmount = !isNaN(parsedAmount) ? parsedAmount : 0;
+
+    const action = {
+        username: username,
+        accountname: accountname || 'N/A', // Default to 'N/A' if accountname is missing
+        actionType: actionType || 'N/A',   // Default to 'N/A' if actionType is missing
+        amount: validAmount,               // Use the valid amount
+        timestamp: new Date().toISOString(), // Timestamp
+        accountType: accountType || 'N/A'  // Default to 'N/A' if accountType is missing
+    };
+
+    const request = actionsStore.add(action);
+
+    request.onsuccess = function() {
+        console.log("Action logged successfully:", action);
+    };
+
+    request.onerror = function(event) {
+        console.error("Error logging action:", event.target.error);
+    };
+}
+
+    // Handle logout with the new icon-based button
+    document.getElementById('logoutBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        logout();
+    });
+
+    function logout() {
+        const transaction = db.transaction([storeName], "readwrite");
+        const store = transaction.objectStore(storeName);
+        store.delete("username"); // Remove the user from IndexedDB
+
+        transaction.oncomplete = function() {
+            alert("Logged out.");
+            window.location.href = "revolutBank.html"; // Redirect to login page
+        };
+
+        transaction.onerror = function(event) {
+            console.error("Error logging out:", event.target.error);
+        };
+    }
+</script>             
+</body>
+</html>

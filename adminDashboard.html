@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Clients</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        /* Navigation Bar Styling */
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav a {
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            background-color: #575757;
+        }
+
+        /* Main Container Styling */
+        .container {
+            width: 90%;
+            margin: 15px auto;
+            flex: 1;
+        }
+
+        /* Cards Section for Client Dashboard */
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .card button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .card button:hover {
+            background-color: #0056b3;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            margin-top: auto;
+        }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 8px;
+        }
+
+        footer .footer-links a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 11px;
+        }
+
+        footer .footer-info {
+            font-size: 9px;
+            color: #ddd;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 16px;
+            }
+
+            p {
+                font-size: 11px;
+            }
+
+            ul li {
+                font-size: 11px;
+            }
+
+            .service-card {
+                width: 100%;
+            }
+
+            .footer-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <!-- Font Awesome CDN link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>RevoluBank</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="admin.html">Home</a>
+        <a href="manageemployee.html">Manage employee</a>
+        <a href="manageclient.html">Manage client</a>
+        <a href="manageressources.html">Manage ressources</a>
+        <a href="adminDashboard.html">Dashboard</a>
+        <a href="#" id="logoutBtn" onclick="logout()"><i class="fas fa-power-off"></i></a>
+    </nav>
+
+    <main>
+        <!-- Dashboard Cards -->
+        <div class="cards">
+            <!-- Card 1: Total Debit Accounts -->
+            <div class="card">
+                <h2>Total Debit Accounts</h2>
+                <p id="total-debit">$0</p>
+                
+            </div>
+
+            <!-- Card 2: Total Credit Accounts -->
+            <div class="card">
+                <h2>Total Credit Accounts</h2>
+                <p id="total-credit">$0</p>
+            </div>
+
+            <!-- Card 4: Total Expenses -->
+            <div class="card">
+                <h2>Total Expenses</h2>
+                <p id="total-expenses">$0</p>
+            </div>
+        
+
+            <!-- Charts Card -->
+            <div class="card">
+                <h2>Charts</h2>
+                <p>See all your financial charts</p>
+                <button id="userChartsBtn" onclick="window.location.href='adminCharts.html'">View Details</button>
+            </div>
+        </div>
+    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2025 Your Bank. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="data.js"></script>
+<script>
+    <!-- Link to data.js -->
+    document.addEventListener("DOMContentLoaded", () => {
+        // Wait for the database to be ready
+        dbReady.then(async (db) => {
+            console.log("Database is ready");
+    
+            // Function to calculate the total debit balance
+            const calculateTotalDebit = async () => {
+                try {
+                    const debitAccounts = await fetchDataFromIndexedDB(db, debitAccountStoreName);
+                    return debitAccounts.reduce((total, account) => total + account.debitBalance, 0);
+                } catch (error) {
+                    console.error("Error calculating total debit:", error);
+                    return 0; // Return 0 if there's an error
+                }
+            };
+    
+            // Function to calculate the total credit balance
+            const calculateTotalCredit = async () => {
+                try {
+                    const creditAccounts = await fetchDataFromIndexedDB(db, creditAccountStoreName);
+                    return creditAccounts.reduce((total, account) => total + account.creditBalance, 0);
+                } catch (error) {
+                    console.error("Error calculating total credit:", error);
+                    return 0; // Return 0 if there's an error
+                }
+            };
+    
+            // Function to calculate the total cost of resources
+            const calculateTotalRessources = async () => {
+                try {
+                    const ressources = await fetchDataFromIndexedDB(db, ressourcesStoreName);
+                    return ressources.reduce((total, ressource) => total + ressource.price * ressource.quantity, 0);
+                } catch (error) {
+                    console.error("Error calculating total resources:", error);
+                    return 0; // Return 0 if there's an error
+                }
+            };
+    
+            // Function to calculate the total expenses (sum of salaries + sum of resources)
+            const calculateTotalExpenses = async () => {
+            try {
+            // Fetch employees and calculate total salaries
+             const employees = await fetchDataFromIndexedDB(db, employeeStoreName);
+            console.log("Employees:", employees); // Debugging log
+
+            const totalSalaries = employees.reduce((total, employee) => {
+            // Ensure salary is a valid number
+            const salary = Number(employee.salary);
+            if (isNaN(salary)) {
+                console.warn("Invalid salary for employee:", employee);
+                return total; // Skip invalid salaries
+            }
+            return total + salary;
+            }, 0);
+            console.log("Total Salaries:", totalSalaries); // Debugging log
+
+            // Fetch resources and calculate total cost
+            const totalRessources = await calculateTotalRessources();
+            console.log("Total Resources:", totalRessources); // Debugging log
+
+            // Return the sum of salaries and resources
+            const totalExpenses = totalSalaries + totalRessources;
+            console.log("Total Expenses:", totalExpenses); // Debugging log
+            return totalExpenses;
+            } catch (error) {
+            console.error("Error calculating total expenses:", error);
+            return 0;
+            }
+            };
+    
+            // Function to update the dashboard cards
+            const updateDashboard = async () => {
+                try {
+                    // Update total debit
+                    document.getElementById("total-debit").textContent = `$${await calculateTotalDebit()}`;
+    
+                    // Update total credit
+                    document.getElementById("total-credit").textContent = `$${await calculateTotalCredit()}`;
+    
+                    // Update total expenses (includes total resources internally)
+                    document.getElementById("total-expenses").textContent = `$${await calculateTotalExpenses()}`;
+                } catch (error) {
+                    console.error("Error updating dashboard:", error);
+                }
+            };
+    
+            // Initialize the dashboard
+            await updateDashboard();
+        }).catch((error) => {
+            console.error("Error initializing database:", error);
+        });
+    
+        // Handle logout with the new icon-based button
+        document.getElementById('logoutBtn').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+            logout();
+        });
+    
+        // Example logout function
+        const logout = () => {
+            console.log("User logged out.");
+            // Redirect to login page or perform other logout actions
+            window.location.href = "login.html";
+        };
+    });
+</script>
+
+</body>
+</html>

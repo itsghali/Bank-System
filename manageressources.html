@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Resources</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        /* Navigation Bar Styling */
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav a {
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            background-color: #575757;
+        }
+
+        /* Resource Form Styling */
+        #ressource-form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #ressource-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        #ressource-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        #ressource-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #ressource-form button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Resource Table Styling */
+        #ressource-table {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #ressource-table thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #ressource-table th,
+        #ressource-table td {
+            padding: 12px;
+            text-align: left;
+            font-size: 16px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #ressource-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        #ressource-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        #ressource-table td:last-child {
+            text-align: center;
+        }
+
+        #ressource-table button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        #ressource-table button.edit {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        #ressource-table button.edit:hover {
+            background-color: #e0a800;
+        }
+
+        #ressource-table button.delete {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        #ressource-table button.delete:hover {
+            background-color: #c82333;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            margin-top: auto;
+        }
+
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 8px;
+        }
+
+        footer .footer-links a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 11px;
+        }
+
+        footer .footer-info {
+            font-size: 9px;
+            color: #ddd;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 16px;
+            }
+
+            p {
+                font-size: 11px;
+            }
+
+            ul li {
+                font-size: 11px;
+            }
+
+            .service-card {
+                width: 100%;
+            }
+
+            .footer-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <!-- Font Awesome CDN link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>RevoluBank</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="admin.html">Home</a>
+        <a href="manageemployee.html">Manage Employee</a>
+        <a href="manageclient.html">Manage Client</a>
+        <a href="manageressources.html">Manage Resources</a>
+        <a href="adminDashboard.html">Dashboard</a>
+        <a href="#" id="logoutBtn" onclick="logout()"><i class="fas fa-power-off"></i></a>
+    </nav>
+
+    <main>
+        <!-- Form for adding/updating resources -->
+        <div id="ressource-form">
+            <h2>Add/Update Resource</h2>
+            <input type="text" id="ressource-name" placeholder="Name">
+            <input type="text" id="ressource-type" placeholder="Type">
+            <input type="number" id="ressource-price" placeholder="Price">
+            <input type="number" id="ressource-quantity" placeholder="Quantity">
+            <button id="save-ressource">Save Resource</button>
+        </div>
+
+        <!-- Table to display resources -->
+        <table id="ressource-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be added dynamically here -->
+            </tbody>
+        </table>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2025 Your Bank. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="data.js"></script>
+<script>
+    // Open or create the IndexedDB database
+    const openDB = () => {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open("UserDB", 32);
+
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains("ressources")) {
+                    db.createObjectStore("ressources", { keyPath: "id", autoIncrement: true });
+                }
+            };
+
+            request.onsuccess = (event) => {
+                db = event.target.result;
+                resolve(db);
+            };
+
+            request.onerror = (event) => {
+                console.error("Error opening database:", event.target.error);
+                reject(event.target.error);
+            };
+        });
+    };
+
+    // Function to add a resource to the ressources table
+    const addResourceToDB = async (resource) => {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction("ressources", "readwrite");
+            const store = transaction.objectStore("ressources");
+            const request = store.add(resource);
+
+            request.onsuccess = () => {
+                console.log("Resource added with ID:", request.result);
+                resolve(request.result);
+            };
+
+            request.onerror = (event) => {
+                console.error("Error adding resource:", event.target.error);
+                reject(event.target.error);
+            };
+        });
+    };
+
+    // Function to fetch all resources from the ressources table
+    const fetchResourcesFromDB = async () => {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction("ressources", "readonly");
+            const store = transaction.objectStore("ressources");
+            const request = store.getAll();
+
+            request.onsuccess = () => {
+                resolve(request.result);
+            };
+
+            request.onerror = (event) => {
+                console.error("Error fetching resources:", event.target.error);
+                reject(event.target.error);
+            };
+        });
+    };
+
+    // Function to render the resource table
+    const renderResourceTable = async () => {
+        const tableBody = document.querySelector("#ressource-table tbody");
+        tableBody.innerHTML = "";
+
+        const ressources = await fetchResourcesFromDB();
+
+        ressources.forEach((ressource) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${ressource.name}</td>
+                <td>${ressource.type}</td>
+                <td>${ressource.price}$</td>
+                <td>${ressource.quantity}</td>
+                <td>
+                    <button class="edit" onclick="editResource(${ressource.id})">Edit</button>
+                    <button class="delete" onclick="deleteResource(${ressource.id})">Delete</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    };
+
+    // Function to add or update a resource
+    document.getElementById("save-ressource").addEventListener("click", async () => {
+        const name = document.getElementById("ressource-name").value;
+        const type = document.getElementById("ressource-type").value;
+        const price = parseFloat(document.getElementById("ressource-price").value);
+        const quantity = parseInt(document.getElementById("ressource-quantity").value);
+
+        if (name && type && !isNaN(price) && !isNaN(quantity)) {
+            const newResource = { name, type, price, quantity };
+            await addResourceToDB(newResource); // Add the resource to IndexedDB
+            await renderResourceTable(); // Update the table
+            clearForm(); // Clear the form
+        } else {
+            alert("Please fill in all fields with valid values.");
+        }
+    });
+
+    // Function to edit a resource
+    const editResource = async (id) => {
+        const ressources = await fetchResourcesFromDB();
+        const resource = ressources.find((res) => res.id === id);
+
+        if (resource) {
+            document.getElementById("ressource-name").value = resource.name;
+            document.getElementById("ressource-type").value = resource.type;
+            document.getElementById("ressource-price").value = resource.price;
+            document.getElementById("ressource-quantity").value = resource.quantity;
+
+            // Delete the resource after editing
+            await deleteResourceFromDB(id);
+            await renderResourceTable();
+        }
+    };
+
+    // Function to delete a resource
+    const deleteResource = async (id) => {
+        if (confirm("Are you sure you want to delete this resource?")) {
+            await deleteResourceFromDB(id);
+            await renderResourceTable();
+        }
+    };
+
+    // Function to delete a resource from the ressources table
+    const deleteResourceFromDB = async (id) => {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction("ressources", "readwrite");
+            const store = transaction.objectStore("ressources");
+            const request = store.delete(id);
+
+            request.onsuccess = () => {
+                console.log("Resource deleted with ID:", id);
+                resolve();
+            };
+
+            request.onerror = (event) => {
+                console.error("Error deleting resource:", event.target.error);
+                reject(event.target.error);
+            };
+        });
+    };
+
+    // Function to clear the form
+    const clearForm = () => {
+        document.getElementById("ressource-name").value = "";
+        document.getElementById("ressource-type").value = "";
+        document.getElementById("ressource-price").value = "";
+        document.getElementById("ressource-quantity").value = "";
+    };
+
+    // Initialize the database and render the table
+    openDB().then(() => {
+        renderResourceTable();
+    }).catch((error) => {
+        console.error("Error initializing database:", error);
+    });
+
+    // Handle logout
+    document.getElementById('logoutBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        logout();
+    });
+
+    const logout = () => {
+        const transaction = db.transaction([storeName], "readwrite");
+        const store = transaction.objectStore(storeName);
+        store.delete("username"); // Remove the user from IndexedDB
+
+        transaction.oncomplete = function() {
+            alert("Logged out.");
+            window.location.href = "revolutBank.html"; // Redirect to login page
+        };
+
+        transaction.onerror = function(event) {
+            console.error("Error logging out:", event.target.error);
+        };
+    };
+</script>
+</body>
+</html>

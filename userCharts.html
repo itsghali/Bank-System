@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RevolutBank</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        /* Navigation Bar Styling */
+        nav {
+            background-color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav a {
+            color: white;
+            padding: 8px 12px;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            background-color: #575757;
+        }
+
+        .charts {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        /* Footer Styling */
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            margin-top: auto;
+        }
+
+        footer .footer-info {
+            font-size: 9px;
+            color: #ddd;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 16px;
+            }
+
+            p {
+                font-size: 11px;
+            }
+
+            ul li {
+                font-size: 11px;
+            }
+
+            .service-card {
+                width: 100%;
+            }
+
+            .footer-links {
+                flex-direction: column;
+            }
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+    </style>
+    <!-- Font Awesome CDN link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>RevoluBank</h1>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="client.html">Home</a>
+        <a href="debitAccount.html">Debit account</a>
+        <a href="creditAccount.html">Credit account</a>
+        <a href="userDashboard.html">Dashboard</a>
+        <a href="#" id="logoutBtn" onclick="logout()"><i class="fas fa-power-off"></i></a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <h2>Welcome to Your Client Dashboard</h2>
+        <div class="charts">
+            <canvas id="barChart"></canvas>
+            <canvas id="lineChart"></canvas>
+            <canvas id="pieChart"></canvas>
+            <canvas id="stackedBarChart"></canvas>
+            <canvas id="radarChart"></canvas>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2025 Your Bank. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="data.js"></script>
+    <script>
+        // Open the IndexedDB
+        const request = indexedDB.open('UserDB', 32);
+
+        request.onupgradeneeded = function(event) {
+            db = event.target.result;
+            console.log("Upgrading DB, existing stores:", db.objectStoreNames);
+
+            if (!db.objectStoreNames.contains(storeName)) {
+                db.createObjectStore(storeName, { keyPath: "username" });
+            }
+
+            if (!db.objectStoreNames.contains(actionsStoreName)) {
+                db.createObjectStore(actionsStoreName, { autoIncrement: true });
+            }
+
+            if (!db.objectStoreNames.contains(debitAccountStoreName)) {
+                db.createObjectStore(debitAccountStoreName, { keyPath: "accountname" });
+            }
+
+            if (!db.objectStoreNames.contains(creditAccountStoreName)) {
+                db.createObjectStore(creditAccountStoreName, { keyPath: "accountname" });
+            }
+        };
+
+        // Database successfully opened
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            console.log("Database opened successfully");
+            createCharts(); // Start chart creation
+        };
+
+        // Handle database errors
+        request.onerror = function(event) {
+            console.error("Error opening database:", event.target.error);
+        };
+
+        // Fetch data from IndexedDB
+        async function fetchDataFromIndexedDB(storeName) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([storeName], 'readonly');
+                const store = transaction.objectStore(storeName);
+                const allData = store.getAll();
+
+                allData.onsuccess = () => resolve(allData.result);
+                allData.onerror = (err) => reject(err);
+            });
+        }
+
+        // Create the charts
+        async function createCharts() {
+            const data = await fetchDataFromIndexedDB(actionsStoreName);
+
+            // Prepare shared data
+            const labels = data.map(item => item.timestamp); // Common labels for all charts
+            const debitData = data.filter(item => item.accountType === 'debit').map(item => item.amount);
+            const creditData = data.filter(item => item.accountType === 'credit').map(item => item.amount);
+            const totalDebit = debitData.reduce((sum, value) => sum + value, 0);
+            const totalCredit = creditData.reduce((sum, value) => sum + value, 0);
+
+            // Create all charts
+            createBarChart(labels, debitData, creditData);
+            createLineChart(labels, debitData);
+            createPieChart(['Debit', 'Credit'], [totalDebit, totalCredit]);
+            createStackedBarChart(labels, debitData, creditData);
+            createRadarChart(labels, debitData, creditData);
+        }
+
+        // Chart creation functions (Bar, Line, Pie, Stacked Bar, Radar)
+        function createBarChart(labels, debitData, creditData) {
+            const ctx = document.getElementById('barChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Debit',
+                            data: debitData,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Credit',
+                            data: creditData,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createLineChart(labels, data) {
+            const ctx = document.getElementById('lineChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Debit',
+                            data: data,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPieChart(labels, data) {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: data,
+                            backgroundColor: ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                            borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)'],
+                            borderWidth: 1
+                        }
+                    ]
+                }
+            });
+        }
+
+        function createStackedBarChart(labels, debitData, creditData) {
+            const ctx = document.getElementById('stackedBarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Debit',
+                            data: debitData,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Credit',
+                            data: creditData,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function createRadarChart(labels, debitData, creditData) {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Debit',
+                            data: debitData,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Credit',
+                            data: creditData,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                }
+            });
+        }
+
+            // Handle logout with the new icon-based button
+    document.getElementById('logoutBtn').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent the default link behavior
+        logout();
+    });
+
+    function logout() {
+        const transaction = db.transaction([storeName], "readwrite");
+        const store = transaction.objectStore(storeName);
+        store.delete("username"); // Remove the user from IndexedDB
+
+        transaction.oncomplete = function() {
+            alert("Logged out.");
+            window.location.href = "revolutBank.html"; // Redirect to login page
+        };
+
+        transaction.onerror = function(event) {
+            console.error("Error logging out:", event.target.error);
+        };
+    }
+    </script>
+</body>
+</html>
